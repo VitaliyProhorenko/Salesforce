@@ -1,0 +1,67 @@
+public class PencilBoxController {
+
+	public List<Pencil__c> pencilList { get; set; }
+    public List<Pencil_Box__c> pencilBoxList { get; set; }
+    public List<SelectOption> selectPencilBoxes { get; set; }
+    public String pencilBoxName { get; set; }
+    public String newPencilBoxName { get; set; }
+    public String newPencilName { get; set; }
+
+	public PencilBoxController () {
+        createPencilList();
+        createPencilBoxList();
+        preparePencilBoxSelect();
+	}
+
+    public PageReference savePencilBox () {
+        savePencilBoxToDB();
+        createPencilBoxList();
+        preparePencilBoxSelect();
+        return null;
+    }
+
+    public PageReference savePencil () {
+		savePencilToDB();
+        createPencilList();
+        return null;
+    }
+
+    private void createPencilBoxList(){
+        pencilBoxList = new List<Pencil_Box__c>();
+        pencilBoxList = [
+			SELECT Id, Name, OwnerId, CreatedDate
+			FROM Pencil_Box__C
+            ORDER BY CreatedDate DESC
+		];
+    }
+
+    private void preparePencilBoxSelect() {
+        selectPencilBoxes = new List<SelectOption>();
+        for ( Pencil_Box__c pencilBox : pencilBoxList ) {
+            selectPencilBoxes.add( new SelectOption ( pencilBox.Id, pencilBox.Name ) );
+        }
+    }
+
+    private void createPencilList(){
+        pencilList = new List<Pencil__c>();
+		pencilList = [
+			SELECT Id, Name, Pencil_Box__c, OwnerId, CreatedDate
+			FROM Pencil__c
+            ORDER BY CreatedDate DESC
+		];
+    }
+
+    private void savePencilToDB(){
+        pencilList = new List<Pencil__c>();
+		pencilList.add(new Pencil__c(Name = newPencilName, 
+                                     Pencil_Box__c = pencilBoxName));
+		insert pencilList;
+    }
+
+    private void savePencilBoxToDB(){
+        pencilBoxList = new List<Pencil_Box__c>();
+		pencilBoxList.add(new Pencil_Box__c(Name = newPencilBoxName));
+		insert pencilBoxList;
+    }
+
+}

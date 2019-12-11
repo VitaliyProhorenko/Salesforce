@@ -1,0 +1,32 @@
+<apex:page controller="PencilBoxController" docType="html-5.0" >
+    <apex:form id="Form">
+        <apex:pageBlock title="Edit Page" >
+
+            <b>Add new Pencil Box:</b> &nbsp;
+            <apex:inputText value="{!newPencilBoxName}" style="width: 270px" /> &nbsp;
+            <apex:commandButton action="{!savePencilBox}" value="Add" reRender="select-pencil-box-list"  style="width: 50px;" /><p/>
+
+            <b>Add new Pencil:</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <apex:outputPanel id="select-pencil-box-list" >
+                <apex:selectList value="{!pencilBoxName}" size="1" style="width: 130px">
+                	<apex:selectOptions value="{!selectPencilBoxes}" />
+            	</apex:selectList> &nbsp;&nbsp;&nbsp;
+            </apex:outputPanel>
+            <apex:inputText value="{!newPencilName}" style="width: 130px" /> &nbsp;
+            <apex:commandButton action="{!savePencil}" reRender="pencil-table" value="Add" style="width: 50px;" /><p/>
+
+            <apex:outputPanel id="pencil-table" >
+                <apex:pageBlockTable value="{!pencilList}" var="item" >
+                    <apex:column headerValue="Action">
+                        <a href="/{!item.Id}" target="_blank">View</a>
+                    </apex:column>
+                    <apex:column value="{!item.Name}" headerValue="Pencil Color" />
+                    <apex:column value="{!item.Pencil_Box__c}" headerValue="Box Name" />
+                    <apex:column value="{!item.CreatedDate}" />
+                    <apex:column value="{!item.OwnerId}" />
+                </apex:pageBlockTable>
+            </apex:outputPanel>
+
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>
